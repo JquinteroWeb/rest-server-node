@@ -1,30 +1,38 @@
-const { response } = require('express')
+const { response,request } = require('express')
 
-const userGet = (req, res = response) => {
+const userGet = (req = request, res = response) => {
+    //get de query params
+    const query = req.query;
     res.json({
-        message: 'get API controller'
+        message: 'get API controller',
+        params:params
     })
 }
 
 const userPost = (req, res = response) => {
-    res.json({
-        message: 'post API controller'
-    })
+    //data from body req
+    const { name, lastName, age, phone } = req.body;
+    //we must to clean the body data
+    res.json({ name, lastName, age, phone })
 }
 
 const userPut = (req, res = response) => {
+    //get params from url
+    const id = req.params.id;
     res.json({
-        message: 'put API controller'
+        "id": id
     })
 }
 
 const userDelete = (req, res = response) => {
+    const id = req.params.id;
     res.json({
         message: 'delete API controller'
     })
 }
 
 const userPatch = (req, res = response) => {
+    const id = req.params.id;
     res.json({
         message: 'patch API controller'
     })
