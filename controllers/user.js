@@ -2,6 +2,7 @@ const { response,request } = require('express')
 
 const userGet = (req = request, res = response) => {
     //get de query params
+    //Se recomienda usar dessestructuracion para agregar parametros por defecto o estraer solo los que quiero.
     const query = req.query;
     res.json({
         message: 'get API controller',
