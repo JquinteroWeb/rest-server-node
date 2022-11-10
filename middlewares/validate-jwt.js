@@ -22,7 +22,8 @@ const validateJWT = async (req = request, res = response, next) => {
             return res.status(401).json({
                 message: 'User not active'
             });
-        }      
+        } 
+        req.userAuth = userAuth;     
 
         next();
     } catch (error) {
