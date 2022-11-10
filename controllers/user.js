@@ -67,11 +67,7 @@ const userPut = async (req, res = response) => {
 }
 
 const userDelete = async (req, res = response) => {
-    const id = req.params.id;
-    //Remove the user from the database
-    //Not recommended becouse we lose the reference integrity
-    //const user2 = await User.findByIdAndDelete(id);
-    //It is better if you change the status
+    const id = req.params.id;     
     const user = await User.findByIdAndUpdate(id, {
         status: false
     });
