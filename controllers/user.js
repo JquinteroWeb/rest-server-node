@@ -1,7 +1,7 @@
 const { response, request } = require('express');
 const { User } = require('../models/user');
 //To encrypt the password
-const bcryptjs = require('bcryptjs');
+const {bcryptjs} = require('bcryptjs');
 
 
 const userGet = async (req = request, res = response) => {

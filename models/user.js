@@ -12,7 +12,7 @@ const UserSchema = Schema(
             required: [true, 'Email is required'],
             unique: true
         },
-        password:{
+        password: {
             type: String,
             required: [true, 'Password is required']
         },
@@ -28,7 +28,7 @@ const UserSchema = Schema(
             required: [true, 'Role is required'],
             enum: ['user', 'admin']
         },
-        status:{
+        status: {
             type: Boolean,
             default: true
         },
@@ -39,11 +39,12 @@ const UserSchema = Schema(
     });
 
 
-UserSchema.methods.toJSON = function(){
-    const {__v,password,...user} = this.toObject();
+UserSchema.methods.toJSON = function () {
+    const { __v, password, _id, ...user } = this.toObject();
+    user.uid = _id
     return user;
 }
 //Create a new model of user
 const User = model('User', UserSchema);
 //Export the model
-module.exports = {User};
+module.exports = { User };
