@@ -18,15 +18,15 @@ const UserSchema = Schema(
         },
         phone: {
             type: String,
-            required: [true, 'Phone is required']
+            //required: [true, 'Phone is required']
         },
         image: {
             type: String
         },
         role: {
-            type: String,
-            required: [true, 'Role is required'],
-            enum: ['user', 'admin']
+            type: String,            
+            enum: ['user', 'admin'],
+            default: 'user'
         },
         status: {
             type: Boolean,
