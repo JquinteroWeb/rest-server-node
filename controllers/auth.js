@@ -6,7 +6,7 @@ const { User } = require("../models/user");
 const { googleVerify } = require("../helpers/google-verify");
 
 
-const loguin = async (req, res = response) => {
+const login = async (req, res = response) => {
     const { email, password } = req.body;
     try {
         //verify email if user exists
@@ -68,7 +68,7 @@ const googleSingIn = async (req, res = response) => {
             await user.save();
         }
 
-        //Valdiate if user is active
+        //Validate if user is active
         if (!user.status) {
             return res.status(401).json({
                 message: "Contact with admin user, this user is blocked or inactive",
@@ -92,6 +92,6 @@ const googleSingIn = async (req, res = response) => {
 
 }
 module.exports = {
-    loguin,
+    login,
     googleSingIn,
 }
