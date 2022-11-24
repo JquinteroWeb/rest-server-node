@@ -2,7 +2,7 @@ const { response, json } = require("express");
 const bcryptjs = require("bcryptjs");
 
 const { generateJWT } = require("../helpers/generate-jwt");
-const { User } = require("../models/user");
+const { User } = require("../models");
 const { googleVerify } = require("../helpers/google-verify");
 
 
@@ -10,7 +10,6 @@ const login = async (req, res = response) => {
     const { email, password } = req.body;
     try {
         //verify email if user exists
-
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({

@@ -6,12 +6,12 @@ const dbConnection = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
-        console.log('conectado a mongodb');       
+        console.log('*****CONEXION WITH MONGODB SUCCESS ******');       
 
 
     } catch (error) {
         console.log(error);
-        throw new Error("Error de conexión");
+        throw new Error("***CONEXION WITH MONGODB FAILED ****");
     }
 }
 

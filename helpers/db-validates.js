@@ -1,17 +1,21 @@
-const { Role } = require('../models/role');
-const { User } = require('../models/user');
 
-const isValidRole = async(role = '') => {
+const {
+    User,
+    Role,
+    Category,
+    Product } = require('../models');
+
+const isValidRole = async (role = '') => {
     const roleExist = await Role.findOne({
         role
     });
-    if(!roleExist){
+    if (!roleExist) {
         throw new Error('Error: role ' + role + ' does not exist');
     }
 }
 
-const existEmail = async(email = '') => {
-    
+const existEmail = async (email = '') => {
+
     //verify if email exist in database.
     const emailExists = await User.findOne({
         email
@@ -21,14 +25,29 @@ const existEmail = async(email = '') => {
         throw new Error('Error: email ' + email + ' already exists in database');
     }
 }
-const existUserById = async(id = '') => {
+const existUserById = async (id = '') => {
     const existUser = await User.findById(id);
-    if(!existUser ){
+    if (!existUser) {
         throw new Error('Error: user with id ' + id + ' does not exist');
+    }
+}
+const existCategoryById = async (id) => {
+    const existCategory = await Category.findById(id)
+    if (!existCategory) {
+        throw new Error('Error: category does not exist');
+    }
+}
+
+const existProductById = async (id) => {
+    const existProduct = Product.findById(id);
+    if (!existProduct) {
+        throw new Error('Error: product does not exist');
     }
 }
 module.exports = {
     isValidRole,
     existEmail,
-    existUserById
+    existUserById,
+    existCategoryById,
+    existProductById,
 }

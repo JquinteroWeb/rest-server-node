@@ -1,7 +1,7 @@
 const { response, request } = require('express');
-const { User } = require('../models/user');
+const { User } = require('../models');
 //To encrypt the password
-const {bcryptjs} = require('bcryptjs');
+const  bcryptjs  = require('bcryptjs');
 
 
 const userGet = async (req = request, res = response) => {
@@ -12,7 +12,7 @@ const userGet = async (req = request, res = response) => {
     const [totalUsers, users] = await Promise.all(
         [
             User.countDocuments(query),
-            await User.find(query)
+            User.find(query)
                 .limit(Number(limit))
                 .skip(Number(since))
         ]
@@ -67,7 +67,7 @@ const userPut = async (req, res = response) => {
 }
 
 const userDelete = async (req, res = response) => {
-    const id = req.params.id;     
+    const id = req.params.id;
     const user = await User.findByIdAndUpdate(id, {
         status: false
     });

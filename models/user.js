@@ -21,7 +21,8 @@ const UserSchema = Schema(
             //required: [true, 'Phone is required']
         },
         image: {
-            type: String
+            type: String,
+            default: ''
         },
         role: {
             type: String,            
@@ -47,4 +48,4 @@ UserSchema.methods.toJSON = function () {
 //Create a new model of user
 const User = model('User', UserSchema);
 //Export the model
-module.exports = { User };
+module.exports =  User ;

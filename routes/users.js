@@ -12,7 +12,7 @@ const {
 const {
     userGet, userPost,
     userDelete, userPut,
-    userPatch } = require('../controllers/user');
+    userPatch } = require('../controllers/users');
 
 
 
