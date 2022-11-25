@@ -10,7 +10,8 @@ class Server {
             auth:'/api/auth',
             category: '/api/categories',
             user: '/api/users',
-            product:'/api/products'
+            product:'/api/products',
+            search: '/api/search'
         }
        
         
@@ -42,6 +43,7 @@ class Server {
         this.app.use(this.paths.auth, require('../routes/auth'));
         this.app.use(this.paths.category, require('../routes/categories'));
         this.app.use(this.paths.product, require('../routes/products'));
+        this.app.use(this.paths.search, require('../routes/search'));
     }
 
     listen(port) {
