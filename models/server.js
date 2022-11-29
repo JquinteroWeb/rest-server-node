@@ -1,20 +1,22 @@
 const express = require('express');
 const cors = require('cors');
-const {dbConnection} = require('../db/config')
+const { dbConnection } = require('../db/config');
+const fileUpload = require('express-fileupload');
 class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT || 8080;
 
         this.paths = {
-            auth:'/api/auth',
+            auth: '/api/auth',
             category: '/api/categories',
             user: '/api/users',
-            product:'/api/products',
-            search: '/api/search'
+            product: '/api/products',
+            search: '/api/search',
+            uploads: '/api/uploads',
         }
-       
-        
+
+
         //Connect to the database
         this.connectarDB();
         //Middlewares
@@ -24,7 +26,7 @@ class Server {
         this.routes();
 
     }
-    async connectarDB(){
+    async connectarDB() {
         await dbConnection();
     }
 
@@ -32,9 +34,14 @@ class Server {
         //Cors
         this.app.use(cors());
         //Lectura y parseo
-        this.app.use(express.json());       
+        this.app.use(express.json());
         //Directorio publico
         this.app.use(express.static('public'));
+        //Manejar carga de archivos
+        this.app.use(fileUpload({
+            useTempFiles: true,
+            tempFileDir: '/tmp/'
+        }));
     }
 
     routes() {
@@ -44,6 +51,7 @@ class Server {
         this.app.use(this.paths.category, require('../routes/categories'));
         this.app.use(this.paths.product, require('../routes/products'));
         this.app.use(this.paths.search, require('../routes/search'));
+        this.app.use(this.paths.uploads, require('../routes/uploads'));
     }
 
     listen(port) {

@@ -45,7 +45,7 @@ const searchUsers = async (param = '', res = response) => {
 const searchProducts = async (param = '', res = response) => {
     const isMongoId = ObjectId.isValid(param); // return true or false
     if (isMongoId) {
-        const product = await Product.findById(param).populate('user','name').populate('category','name');
+        const product = await Product.findById(param).populate('user', 'name').populate('category', 'name');
         return res.json({
             results: (product) ? [
                 producst
@@ -57,7 +57,7 @@ const searchProducts = async (param = '', res = response) => {
 
     const products = await Product.find({
         $and: [{ name: regex }, { status: true }]
-    }).populate('user','name').populate('category','name');
+    }).populate('user', 'name').populate('category', 'name');
 
     const countProducts = await Product.countDocuments({
         $and: [{ name: regex }, { status: true }]
