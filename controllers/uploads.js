@@ -1,5 +1,6 @@
 const { response } = require("express");
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 const uploadFile = (req, res = response) => {
     //Validate if the frontend sent a file
@@ -8,7 +9,20 @@ const uploadFile = (req, res = response) => {
     }
 
     const { file } = req.files;
-    const uploadPath = path.join(__dirname, '../uploads/', file.name);
+
+    //Get extension
+    const nameCut = file.name.split('.');
+    const extension = nameCut[nameCut.length - 1];
+
+    //Validate with extension allowed
+    const allExtAllowed = ['jpg', 'png', 'gif', 'jpeg'];
+    if (!allExtAllowed.includes(extension)) {
+        return res.status(400).json({ message: `Invalid file extension: ${extension}. Only allowed ${allExtAllowed}`});
+    }
+
+    //Rename file
+    const nameTemp = uuidv4()+'.'+extension;
+    const uploadPath = path.join(__dirname, '../uploads/', nameTemp);
 
     // Use the mv() method to place the file somewhere on your server
     file.mv(uploadPath, (err) => {
