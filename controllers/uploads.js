@@ -66,10 +66,56 @@ const updateImage = async (req, res = response) => {
 
     res.json({
         model
-    })
+    });
+}
+
+const showImage = async (req, res = response) => {
+    const { collection, id } = req.params;
+
+    let model;
+    switch (collection) {
+        case 'users':
+            model = await User.findById(id);
+            if (!model) {
+                return res.status(400).json({
+                    message: 'User id not found ' + id,
+                });
+            }
+            break
+        case 'products':
+            model = await Product.findById(id);
+            if (!model) {
+                return res.status(400).json({
+                    message: 'Product id not found ' + id,
+                });
+            }
+            break;
+        default:
+            return res.status(500).json({
+                message: 'I forgot to validate this xd'
+            });
+    }
+
+    //! delete files to update 
+    try {
+        if (model.image) {
+            const pathImage = path.join(__dirname, '../uploads/', collection, model.image);
+            if (fs.existsSync(pathImage)) {
+                return res.sendFile(pathImage);
+            }
+        }
+    } catch (error) {
+        return res.json({
+            message: 'Error while server try to send file: ' + error.message
+        })
+    }
+
+    const defaultPath = path.join(__dirname, '../assets', 'no-image.jpg')
+    return res.sendFile(defaultPath);
 }
 
 module.exports = {
     uploadFile,
-    updateImage
+    updateImage,
+    showImage
 }
