@@ -26,6 +26,10 @@ const productSchema = Schema({
         ref: 'Category',
         required: [true, 'Category is required']
     },
+    image: {
+        type: String,
+        default: ''
+    }
 });
 
 productSchema.methods.toJSON = function () {

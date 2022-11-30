@@ -1,15 +1,12 @@
 const { response } = require("express");
 const { uploadFiles } = require("../helpers");
+const { User, Product } = require("../models");
 
-const uploadFile = async(req, res = response) => {
-    //Validate if the frontend sent a file
-    if (!req.files || Object.keys(req.files).length === 0 || !req.files.file) {
-        return res.status(400).send({ message: 'No files were uploaded.' });
-    }
+const uploadFile = async (req, res = response) => {   
 
     //Default images
     try {
-        const fileName = await uploadFiles(req.files,undefined,'imgs');
+        const fileName = await uploadFiles(req.files, undefined, 'imgs');
         res.json({
             fileName
         });
@@ -19,9 +16,45 @@ const uploadFile = async(req, res = response) => {
             msg
         });
     }
-   
+
+}
+
+const updateImage = async (req, res = response) => {
+    const { collection, id } = req.params;
+    let model;
+    switch (collection) {
+        case 'users':
+            model = await User.findById(id);
+            if (!model) {
+                return res.status(400).json({
+                    message: 'User id not found ' + id,
+                });
+            }
+            break
+        case 'products':
+            model = await Product.findById(id);
+            if (!model) {
+                return res.status(400).json({
+                    message: 'Product id not found ' + id,
+                }); 
+            }
+            break;
+        default:
+            return res.status(500).json({
+                message: 'I forgot to validate this xd'
+            });
+    }
+    const fileName = await uploadFiles(req.files, undefined, collection);
+    model.image = fileName;
+
+    await model.save();
+
+    res.json({
+        model
+    })
 }
 
 module.exports = {
-    uploadFile
+    uploadFile,
+    updateImage
 }

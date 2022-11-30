@@ -13,7 +13,13 @@ const isValidRole = async (role = '') => {
         throw new Error('Error: role ' + role + ' does not exist');
     }
 }
-
+const collectionAllowed = async (collection = '',collectionAllowed = []) => {
+    const included = collectionAllowed.includes(collection);
+    if(!included){
+        throw new Error('Error: collection ' + collection + ' is not allowed, ' + collectionAllowed);
+    }
+    return true;
+}
 const existEmail = async (email = '') => {
 
     //verify if email exist in database.
@@ -50,4 +56,5 @@ module.exports = {
     existUserById,
     existCategoryById,
     existProductById,
+    collectionAllowed
 }
