@@ -1,8 +1,14 @@
+const path = require("path");
 const { response } = require("express");
+const fs = require("fs");
+
+const cloudinary = require('cloudinary').v2;
+cloudinary.config(process.env.CLOUDINARY_URL);
+
 const { uploadFiles } = require("../helpers");
 const { User, Product } = require("../models");
-const path = require("path");
-const fs = require("fs");
+
+
 
 const uploadFile = async (req, res = response) => {
 
@@ -69,6 +75,55 @@ const updateImage = async (req, res = response) => {
     });
 }
 
+const updateImageCloudinary = async (req, res = response) => {
+    const { collection, id } = req.params;
+    let model;
+    switch (collection) {
+        case 'users':
+            model = await User.findById(id);
+            if (!model) {
+                return res.status(400).json({
+                    message: 'User id not found ' + id,
+                });
+            }
+            break
+        case 'products':
+            model = await Product.findById(id);
+            if (!model) {
+                return res.status(400).json({
+                    message: 'Product id not found ' + id,
+                });
+            }
+            break;
+        default:
+            return res.status(500).json({
+                message: 'I forgot to validate this xd'
+            });
+    }
+
+    //! delete files to update 
+
+    if (model.image) {
+        const nameArr = model.image.split('/');       
+        const nameFile = nameArr[nameArr.length - 1];
+       
+        const [ publicId ] = nameFile.split('.');
+        await cloudinary.uploader.destroy(publicId);
+    }
+
+    const { tempFilePath } = req.files.file;
+
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+
+    model.image = secure_url;
+
+    await model.save();
+
+    res.json({
+        model
+    });
+}
+
 const showImage = async (req, res = response) => {
     const { collection, id } = req.params;
 
@@ -117,5 +172,6 @@ const showImage = async (req, res = response) => {
 module.exports = {
     uploadFile,
     updateImage,
-    showImage
+    showImage,
+    updateImageCloudinary
 }
