@@ -103,7 +103,10 @@ const updateImageCloudinary = async (req, res = response) => {
     //! delete files to update 
     try {
         if (model.image) {
-
+            const nameArrImage = model.image.split('/');
+            const name = nameArrImage[nameArrImage.length - 1];
+            const [id] = name.split('.');
+            cloudinary.uploader.destroy(id);
         }
     } catch (error) {
 
@@ -151,10 +154,7 @@ const showImage = async (req, res = response) => {
     //! delete files to update 
     try {
         if (model.image) {
-            const pathImage = path.join(__dirname, '../uploads/', collection, model.image);
-            if (fs.existsSync(pathImage)) {
-                return res.sendFile(pathImage);
-            }
+            return res.json({ imageUrl: model.image });
         }
     } catch (error) {
         return res.json({
