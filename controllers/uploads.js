@@ -1,8 +1,12 @@
 const { response } = require("express");
+const fs = require("fs");
+const cloudinary = require('cloudinary').v2;
+cloudinary.config(process.env.CLOUDINARY_URL);
+
+
 const { uploadFiles } = require("../helpers");
 const { User, Product } = require("../models");
 const path = require("path");
-const fs = require("fs");
 
 const uploadFile = async (req, res = response) => {
 
