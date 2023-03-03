@@ -73,6 +73,54 @@ const updateImage = async (req, res = response) => {
     });
 }
 
+
+const updateImageCloudinary = async (req, res = response) => {
+    const { collection, id } = req.params;
+    let model;
+    switch (collection) {
+        case 'users':
+            model = await User.findById(id);
+            if (!model) {
+                return res.status(400).json({
+                    message: 'User id not found ' + id,
+                });
+            }
+            break
+        case 'products':
+            model = await Product.findById(id);
+            if (!model) {
+                return res.status(400).json({
+                    message: 'Product id not found ' + id,
+                });
+            }
+            break;
+        default:
+            return res.status(500).json({
+                message: 'I forgot to validate this xd'
+            });
+    }
+
+    //! delete files to update 
+    try {
+        if (model.image) {
+
+        }
+    } catch (error) {
+
+    }
+
+    const { tempFilePath } = req.files.file;
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+
+    model.image = secure_url;
+    await model.save();
+
+    res.json({
+        model
+    });
+}
+
+
 const showImage = async (req, res = response) => {
     const { collection, id } = req.params;
 
@@ -121,5 +169,6 @@ const showImage = async (req, res = response) => {
 module.exports = {
     uploadFile,
     updateImage,
-    showImage
+    showImage,
+    updateImageCloudinary
 }
